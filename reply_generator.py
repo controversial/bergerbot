@@ -113,10 +113,11 @@ class WolframAlpha(Command):
         self.roles = ["@everyone"]
         self.args = args
     def execution(self):
-        waclient = wolframalpha.Client("TJJVVQ-YUYA924HU8")
-        res = waclient.query(self.args)
+        waclient = wolframalpha.Client("TJJVVQ-7TJWQRP962")
+        res = waclient.query(self.args[0])
         pods = [p.text.encode("utf-8") for p in res.pods if p.text is not None]
         self.returnstr = "\n\n".join(pods)
+        
     def final_return(self):
         return [["SAY",self.returnstr]]
 
