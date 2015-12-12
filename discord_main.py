@@ -40,22 +40,6 @@ def on_ready():
         global inittime
         inittime = time.time()
 
-    servers = client.servers
-    botserver = servers[[s.name for s in servers].index("bergerbot")]
-    channels = botserver.channels
-    botchannel = channels[[c.name for c in channels].index("bergerbot")]
-    wakeups = ["Bergerbot is up and running",
-               "Return of the bergerbot :O",
-               "I'm BAAAAAAAACKK!!!!!",
-               "Ok, I'm back now.",
-               "I read. Quite enjoying my newfound literacy.",
-               "*yawn* How long was I asleep?"]
-    
-    if open("discord_log.txt").readlines()[-2].startswith("MANUAL"):
-        client.send_message(botchannel, "RESTART\n\n"+random.choice(wakeups))
-    else:
-        print open("discord_log.txt").readlines()[-2]
-
 @client.event
 def on_message(message):
     if message.author.id != client.user.id and message.channel.name == 'bergerbot':
