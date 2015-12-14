@@ -1,45 +1,14 @@
-import chatterbot
-chatbot = chatterbot.ChatBot("BergerBot", storage_adapter = "chatterbot.adapters.storage.JsonDatabaseAdapter")
-from commands import *
+from main import reply_generator
+from shakespeare import shakespeare
 
-set_train_bot(chatbot)
-commands = {c.name:c for c in [helpme, train, stop, invite, echo, silentecho, WolframAlpha, Time, dateTime, date, restart, xkcd]}
-cmdnames = commands.keys()
-
-
-def processMsg(message, userRoles):
-    if message.startswith('!'):
-        inp = message[1:]
-        for cn in cmdnames:
-            if inp.startswith(cn):
-                #Get command arguments
-                args = inp[len(cn)+1:]
-                if args.endswith(')'):
-                    args = args[:-1].split(",")
-                else:
-                    args = args.split(",")
-
-                #Actual instance of Command subclass
-                cmdInstance = commands[cn](args)
-
-                #CHECK PERMISSIONS
-                #Roles which are allowed to execute command
-                allowedRoles = cmdInstance.roles
-                #Whether the command is allowed to be executed (If there is any intersection between userRoles and allowedRoles)
-                allowed = any(i in allowedRoles for i in userRoles)
-                #Execute command
-                if allowed:
-                    out = cmdInstance.execute()
-                else:
-                    out = [["SAY", "YOU SHALL NOT PASS!!!!!"]]
-
-                return out
-
-    #Otherwise generate chatbot response
-    else:
-        return [["SAY",chatbot.get_response(message)]]
-
-if __name__ == '__main__':
-    print 'ready'
-    while 1:
-        print processMsg(raw_input(":"), ['@admins'])
+def genReply(message, userRoles, channelname):
+    channelname = str(channelname)
+    if channelname == "bergerbot":
+        print 'bergerbot'
+        return reply_generator.processMsg(message, userRoles)
+    elif channelname == "shakespeare":
+        print 'shakespeare'
+        return [["SAY",shakespeare.get_shakespeare_response(message)]]
+    elif channelname == "general":
+        print 'general'
+        return [["DEL"]]

@@ -4,7 +4,7 @@ import time
 import traceback
 import os
 
-from reply_generator import processMsg
+from reply_generator import genReply
 
 client = discord.Client()
 client.login('ldt@deentaylor.com', 'bergers4days')
@@ -20,7 +20,7 @@ def cmdHandle(client, message):
     #user's roles (for permissions)
     userRoles = [r.name for r in member.roles]
     #Processs properly structured response
-    cmds = processMsg(message.content, userRoles)
+    cmds = genReply(message.content, userRoles, message.channel.name)
     if cmds:
         for c in cmds:
             if c[0] == "DEL":
@@ -42,7 +42,7 @@ def on_ready():
 
 @client.event
 def on_message(message):
-    if message.author.id != client.user.id and message.channel.name == 'bergerbot':
+    if message.author.id != client.user.id:
         print message.author.name+": "+message.content
         cmdHandle(client, message)
     
